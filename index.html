@@ -1,124 +1,108 @@
 <!DOCTYPE html>
 <html lang="es">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Mapa de Ruido - Línea 2</title>
-    <link
-      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Inter:wght@300;400;600&display=swap"
-      rel="stylesheet"
-    />
-    <style>
-      body {
-        margin: 0;
-        font-family: 'Inter', sans-serif;
-        background-color: #faf8f6;
-        color: #333;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        padding: 20px;
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mapa de Ruido Línea 2</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display&display=swap" rel="stylesheet">
+  <script src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js"></script>
+  <link href="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css" rel="stylesheet" />
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Playfair Display', serif;
+      background-color: #fdf9f3;
+      color: #3b3b3b;
+    }
+    #map {
+      position: absolute;
+      top: 150px;
+      bottom: 0;
+      width: 100%;
+    }
+    .info {
+      position: absolute;
+      top: 0;
+      width: 100%;
+      background-color: #fff8f0;
+      padding: 1em;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      z-index: 1;
+    }
+    .info h1 {
+      margin: 0 0 0.5em 0;
+      font-size: 2em;
+    }
+    .info p {
+      margin: 0;
+      font-size: 1em;
+    }
+    .legend {
+      display: flex;
+      gap: 1em;
+      margin-top: 0.5em;
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 0.3em;
+    }
+    .legend-color {
+      width: 15px;
+      height: 15px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+    .low { background-color: #91c788; }
+    .medium { background-color: #f7c948; }
+    .high { background-color: #f25c54; }
+  </style>
+</head>
+<body>
+  <div class="info">
+    <h1>Mapa de Ruido - Línea 2 del Metro de Santiago</h1>
+    <p>Este es un mapa de la contaminación acústica percibida en las diferentes estaciones de la Línea 2 del metro de Santiago. Las estaciones están clasificadas según su nivel de ruido percibido:</p>
+    <div class="legend">
+      <div class="legend-item"><span class="legend-color low"></span> Contaminación acústica baja</div>
+      <div class="legend-item"><span class="legend-color medium"></span> Contaminación acústica media</div>
+      <div class="legend-item"><span class="legend-color high"></span> Contaminación acústica alta</div>
+    </div>
+  </div>
+  <div id="map"></div>
+
+  <script>
+    mapboxgl.accessToken = 'pk.eyJ1IjoibWlsa3liYW5hbnlhbiIsImEiOiJjbWRldXgzczcwNmhiMm1vOWJscDBoejVyIn0.b62_DeNMUXY9kQImRg5E-w';
+    const map = new mapboxgl.Map({
+      container: 'map',
+      style: 'mapbox://styles/mapbox/light-v10',
+      center: [-70.6506, -33.45],
+      zoom: 11.5
+    });
+
+    const estaciones = [
+      { nombre: 'Departamental', coords: [-70.6394, -33.5010], ruido: 5 },
+      { nombre: 'Cementerios', coords: [-70.6412, -33.4067], ruido: 12 },
+      { nombre: 'Einstein', coords: [-70.6419, -33.4011], ruido: 18 },
+      { nombre: 'Dorsal', coords: [-70.6426, -33.3958], ruido: 42 },
+      { nombre: 'Zapadores', coords: [-70.6431, -33.3906], ruido: 35 },
+      { nombre: 'Vespucio Norte', coords: [-70.6439, -33.3854], ruido: 45 }
+    ];
+
+    estaciones.forEach(estacion => {
+      let color = '#91c788';
+      if (estacion.ruido > 40) {
+        color = '#f25c54';
+      } else if (estacion.ruido > 10) {
+        color = '#f7c948';
       }
 
-      h1 {
-        font-family: 'Playfair Display', serif;
-        font-size: 2.5em;
-        margin-bottom: 10px;
-        color: #4b3f72;
-      }
-
-      p {
-        font-size: 1.1em;
-        max-width: 700px;
-        text-align: center;
-        margin-bottom: 30px;
-        line-height: 1.6;
-      }
-
-      #map {
-        height: 600px;
-        width: 100%;
-        max-width: 900px;
-        border: 2px solid #e0dcdc;
-        border-radius: 12px;
-        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-      }
-    </style>
-    <link
-      rel="stylesheet"
-      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-      integrity="sha256-pMpr2bZ6NtLWxF1V9FZz8sRP0XpY4/2jR2Cqj3h3v5Q="
-      crossorigin=""
-    />
-    <script
-      src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-      integrity="sha256-o9N1jGDhZrfP8Zcm0jM+PeLacGqY6F1MXLM2Rk0rjZE="
-      crossorigin=""
-    ></script>
-  </head>
-  <body>
-    <h1>Mapa de Ruido - Línea 2</h1>
-    <p>
-      Este es un mapa de la contaminación acústica percibida en las diferentes estaciones de la Línea 2 del Metro de Santiago. Cada marcador representa una estación, y su color indica el nivel estimado de ruido:
-      <strong style="color:#69b578;">verde</strong> para baja, 
-      <strong style="color:#f7c948;">amarillo</strong> para media y 
-      <strong style="color:#e85d75;">rojo</strong> para alta contaminación acústica.
-    </p>
-    <div id="map"></div>
-    <script>
-      const estaciones = [
-        { nombre: "Vespucio Norte", lat: -33.37759, lng: -70.67894, ruido: 9 },
-        { nombre: "Zapadores", lat: -33.38668, lng: -70.67596, ruido: 11 },
-        { nombre: "Dorsal", lat: -33.39266, lng: -70.67069, ruido: 12 },
-        { nombre: "Einstein", lat: -33.39824, lng: -70.66468, ruido: 19 },
-        { nombre: "Cementerios", lat: -33.40419, lng: -70.65777, ruido: 14 },
-        { nombre: "Cerro Blanco", lat: -33.41018, lng: -70.65364, ruido: 27 },
-        { nombre: "Patronato", lat: -33.41562, lng: -70.64975, ruido: 24 },
-        { nombre: "Puente Cal y Canto", lat: -33.41941, lng: -70.64334, ruido: 13 },
-        { nombre: "Santa Ana", lat: -33.42639, lng: -70.64125, ruido: 17 },
-        { nombre: "Los Héroes", lat: -33.44418, lng: -70.66302, ruido: 39 },
-        { nombre: "Toesca", lat: -33.45524, lng: -70.66217, ruido: 32 },
-        { nombre: "Parque O'Higgins", lat: -33.46351, lng: -70.66056, ruido: 42 },
-        { nombre: "Rondizzoni", lat: -33.47132, lng: -70.66014, ruido: 29 },
-        { nombre: "Franklin", lat: -33.47926, lng: -70.65965, ruido: 41 },
-        { nombre: "El Llano", lat: -33.48941, lng: -70.65068, ruido: 36 },
-        { nombre: "San Miguel", lat: -33.49688, lng: -70.64545, ruido: 49 },
-        { nombre: "Lo Vial", lat: -33.50457, lng: -70.64077, ruido: 55 },
-        { nombre: "Departamental", lat: -33.51479, lng: -70.63435, ruido: 47 }
-      ];
-
-      const map = L.map("map").setView([-33.46, -70.65], 12);
-
-      L.tileLayer("https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}", {
-        attribution:
-          '© <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, © <a href="https://www.mapbox.com/">Mapbox</a>',
-        maxZoom: 18,
-        id: "mapbox/streets-v11",
-        tileSize: 512,
-        zoomOffset: -1,
-        accessToken:
-          "pk.eyJ1IjoibWlsa3liYW5hbnlhbiIsImEiOiJjbWRldXgzczcwNmhiMm1vOWJscDBoejVyIn0.b62_DeNMUXY9kQImRg5E-w"
-      }).addTo(map);
-
-      estaciones.forEach((estacion) => {
-        let color = "#69b578"; // Verde por defecto
-        if (estacion.ruido > 40) {
-          color = "#e85d75"; // Rojo
-        } else if (estacion.ruido > 10) {
-          color = "#f7c948"; // Amarillo
-        }
-
-        L.circleMarker([estacion.lat, estacion.lng], {
-          radius: 10,
-          fillColor: color,
-          color: "#fff",
-          weight: 1,
-          opacity: 1,
-          fillOpacity: 0.8
-        })
-          .addTo(map)
-          .bindPopup(`<strong>${estacion.nombre}</strong><br>Ruido: ${estacion.ruido}%`);
-      });
-    </script>
-  </body>
+      new mapboxgl.Marker({
+        color: color
+      })
+      .setLngLat(estacion.coords)
+      .setPopup(new mapboxgl.Popup().setText(`${estacion.nombre} - Ruido: ${estacion.ruido}%`))
+      .addTo(map);
+    });
+  </script>
+</body>
 </html>
