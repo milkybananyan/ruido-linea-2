@@ -1,0 +1,117 @@
+[
+  {
+    "nombre": "Ciudad del Niño",
+    "lat": -33.50954,
+    "lon": -70.65665,
+    "porcentaje": 2.2
+  },
+  {
+    "nombre": "Departamental",
+    "lat": -33.50244,
+    "lon": -70.65463,
+    "porcentaje": 5.4
+  },
+  {
+    "nombre": "Lo Vial",
+    "lat": -33.49683,
+    "lon": -70.65302,
+    "porcentaje": 2.2
+  },
+  {
+    "nombre": "San Miguel",
+    "lat": -33.48872,
+    "lon": -70.65107,
+    "porcentaje": 2.2
+  },
+  {
+    "nombre": "El Llano",
+    "lat": -33.4826,
+    "lon": -70.64938,
+    "porcentaje": 1.1
+  },
+  {
+    "nombre": "Franklin",
+    "lat": -33.47666,
+    "lon": -70.64948,
+    "porcentaje": 45.2
+  },
+  {
+    "nombre": "Rondizzoni",
+    "lat": -33.46966,
+    "lon": -70.65637,
+    "porcentaje": 4.3
+  },
+  {
+    "nombre": "Parque O'Higgins",
+    "lat": -33.4605,
+    "lon": -70.6557,
+    "porcentaje": 21.5
+  },
+  {
+    "nombre": "Toesca",
+    "lat": -33.45298,
+    "lon": -70.65859,
+    "porcentaje": 8.6
+  },
+  {
+    "nombre": "Los Héroes",
+    "lat": -33.44616,
+    "lon": -70.66048,
+    "porcentaje": 71.0
+  },
+  {
+    "nombre": "Santa Ana",
+    "lat": -33.43825,
+    "lon": -70.6599,
+    "porcentaje": 36.6
+  },
+  {
+    "nombre": "Puente Cal y Canto",
+    "lat": -33.43284,
+    "lon": -70.65308,
+    "porcentaje": 31.2
+  },
+  {
+    "nombre": "Patronato",
+    "lat": -33.42973,
+    "lon": -70.64712,
+    "porcentaje": 17.2
+  },
+  {
+    "nombre": "Cerro Blanco",
+    "lat": -33.42275,
+    "lon": -70.64506,
+    "porcentaje": 0.0
+  },
+  {
+    "nombre": "Cementerios",
+    "lat": -33.41398,
+    "lon": -70.6436,
+    "porcentaje": 0.0
+  },
+  {
+    "nombre": "Einstein",
+    "lat": -33.40595,
+    "lon": -70.64317,
+    "porcentaje": 1.1
+  },
+  {
+    "nombre": "Dorsal",
+    "lat": -33.39696,
+    "lon": -70.64274,
+    "porcentaje": 1.1
+  },
+  {
+    "nombre": "Zapadores",
+    "lat": -33.39094,
+    "lon": -70.64244,
+    "porcentaje": 4.3
+  },
+  {
+    "nombre": "Vespucio Norte",
+    "lat": -33.38075,
+    "lon": -70.64634,
+    "porcentaje": 8.6
+  }
+]
+
