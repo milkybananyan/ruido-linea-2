@@ -1,121 +1,143 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Mapa de Ruido Línea 2</title>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Source+Sans+3:wght@300;600&display=swap" rel="stylesheet">
-  <style>
-    body {
-      margin: 0;
-      font-family: 'Source Sans 3', sans-serif;
-      background-color: #fdfaf6;
-      color: #3e3e3e;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mapa de Ruido - Línea 2</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Quicksand:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      integrity="sha256-sA+4J1r3/k0fEhlzN1A4u6JzrKQ2a1o9gEN0ZfE7hZQ="
+      crossorigin=""
+    />
+    <style>
+      body {
+        margin: 0;
+        font-family: 'Quicksand', sans-serif;
+        background-color: #f9f6f2;
+        color: #3e3e3e;
+        padding: 0;
+      }
 
-    h1 {
-      font-family: 'Playfair Display', serif;
-      font-size: 2em;
-      margin-top: 20px;
-    }
+      h1 {
+        font-family: 'Playfair Display', serif;
+        font-size: 2.5rem;
+        text-align: center;
+        margin-top: 30px;
+        color: #704c5e;
+      }
 
-    #descripcion {
-      font-size: 1em;
-      margin: 10px auto 20px;
-      max-width: 600px;
-      text-align: center;
-      padding: 0 20px;
-    }
+      p.description {
+        font-size: 1.1rem;
+        max-width: 700px;
+        margin: 10px auto 30px auto;
+        text-align: center;
+        color: #5a4d4d;
+        line-height: 1.6;
+      }
 
-    #map {
-      height: 600px;
-      width: 90%;
-      max-width: 800px;
-      border: 2px solid #d8cfc4;
-      border-radius: 8px;
-      margin-bottom: 20px;
-    }
+      #map {
+        height: 80vh;
+        width: 90vw;
+        margin: 0 auto 40px auto;
+        border-radius: 16px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      }
 
-    .legend {
-      background: white;
-      padding: 10px;
-      border-radius: 6px;
-      border: 1px solid #ccc;
-      font-size: 0.9em;
-      line-height: 1.4;
-    }
-    .legend div {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .legend span {
-      display: inline-block;
-      width: 14px;
-      height: 14px;
-      border-radius: 50%;
-    }
-  </style>
-  <script src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js"></script>
-  <link href="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css" rel="stylesheet" />
-</head>
-<body>
-  <h1>Contaminación Acústica Línea 2</h1>
-  <div id="descripcion">
-    Este es un mapa de la contaminación acústica percibida en las diferentes estaciones de la Línea 2 del metro de Santiago. Los colores indican el nivel de ruido estimado en cada estación.
-  </div>
-  <div id="map"></div>
-  <div class="legend" style="position: absolute; bottom: 30px; right: 30px;">
-    <div><span style="background-color: #a8dadc;"></span> Contaminación acústica baja</div>
-    <div><span style="background-color: #ffb703;"></span> Contaminación acústica media</div>
-    <div><span style="background-color: #e63946;"></span> Contaminación acústica alta</div>
-  </div>
-  <script>
-    mapboxgl.accessToken = 'pk.eyJ1IjoibWlsa3liYW5hbnlhbiIsImEiOiJjbWRldXgzczcwNmhiMm1vOWJscDBoejVyIn0.b62_DeNMUXY9kQImRg5E-w';
+      .legend {
+        position: absolute;
+        bottom: 30px;
+        left: 30px;
+        background: white;
+        padding: 10px 15px;
+        border-radius: 10px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+        font-size: 0.9rem;
+        font-family: 'Quicksand', sans-serif;
+      }
 
-    const estaciones = [
-      { nombre: "Ciudad del Niño", lat: -33.50954, lon: -70.65665, porcentaje: 2.2 },
-      { nombre: "Departamental", lat: -33.50244, lon: -70.65463, porcentaje: 5.4 },
-      { nombre: "Lo Vial", lat: -33.49683, lon: -70.65302, porcentaje: 2.2 },
-      { nombre: "San Miguel", lat: -33.48872, lon: -70.65107, porcentaje: 2.2 },
-      { nombre: "El Llano", lat: -33.4826, lon: -70.64938, porcentaje: 1.1 },
-      { nombre: "Franklin", lat: -33.47666, lon: -70.64948, porcentaje: 45.2 },
-      { nombre: "Rondizzoni", lat: -33.46966, lon: -70.65637, porcentaje: 4.3 },
-      { nombre: "Parque O'Higgins", lat: -33.4605, lon: -70.6557, porcentaje: 21.5 },
-      { nombre: "Toesca", lat: -33.45298, lon: -70.65859, porcentaje: 8.6 },
-      { nombre: "Los Heroes", lat: -33.44616, lon: -70.66048, porcentaje: 71.0 },
-      { nombre: "Santa Ana", lat: -33.43825, lon: -70.6599, porcentaje: 36.6 },
-      { nombre: "Puente Cal y Canto", lat: -33.43284, lon: -70.65308, porcentaje: 31.2 },
-      { nombre: "Patronato", lat: -33.42973, lon: -70.64712, porcentaje: 17.2 },
-      { nombre: "Cerro Blanco", lat: -33.42275, lon: -70.64506, porcentaje: 0 },
-      { nombre: "Cementerios", lat: -33.41398, lon: -70.6436, porcentaje: 0 },
-      { nombre: "Einstein", lat: -33.40595, lon: -70.64317, porcentaje: 1.1 },
-      { nombre: "Dorsal", lat: -33.39696, lon: -70.64274, porcentaje: 1.1 },
-      { nombre: "Zapadores", lat: -33.39094, lon: -70.64244, porcentaje: 4.3 },
-      { nombre: "Vespucio Norte", lat: -33.38075, lon: -70.64634, porcentaje: 8.6 }
-    ];
+      .legend div {
+        margin-bottom: 6px;
+        display: flex;
+        align-items: center;
+      }
 
-    const map = new mapboxgl.Map({
-      container: 'map',
-      style: 'mapbox://styles/mapbox/light-v10',
-      center: [-70.65, -33.46],
-      zoom: 12
-    });
+      .legend span {
+        display: inline-block;
+        width: 18px;
+        height: 18px;
+        margin-right: 10px;
+        border-radius: 4px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Mapa de Ruido - Línea 2</h1>
+    <p class="description">
+      Este es un mapa de la contaminación acústica percibida en las diferentes estaciones de la Línea 2 del Metro de Santiago. Cada punto representa una estación, y su color indica el nivel de ruido estimado según estudios comunitarios.
+    </p>
+    <div id="map"></div>
+    <div class="legend">
+      <div><span style="background-color: #88c9bf"></span> Contaminación acústica baja</div>
+      <div><span style="background-color: #f7cb73"></span> Contaminación acústica media</div>
+      <div><span style="background-color: #e76f51"></span> Contaminación acústica alta</div>
+    </div>
 
-    estaciones.forEach(est => {
-      let color;
-      if (est.porcentaje <= 10) color = '#a8dadc'; // baja
-      else if (est.porcentaje <= 35) color = '#ffb703'; // media
-      else color = '#e63946'; // alta
+    <script
+      src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+      integrity="sha256-pMpr1z3H8YBz7j5kk+EOkGoSpEF0B6M8XkIuH6kM7Mw="
+      crossorigin=""
+    ></script>
+    <script>
+      const estaciones = [
+        { nombre: "Vespucio Norte", lat: -33.379243, lng: -70.684527, ruido: 44 },
+        { nombre: "Zapata", lat: -33.3848, lng: -70.6817, ruido: 39 },
+        { nombre: "Dorsal", lat: -33.390132, lng: -70.678199, ruido: 31 },
+        { nombre: "Einstein", lat: -33.398612, lng: -70.673962, ruido: 28 },
+        { nombre: "Cementerios", lat: -33.405521, lng: -70.670273, ruido: 18 },
+        { nombre: "Cerro Blanco", lat: -33.412014, lng: -70.665993, ruido: 12 },
+        { nombre: "Patronato", lat: -33.416206, lng: -70.65925, ruido: 9 },
+        { nombre: "Puente Cal y Canto", lat: -33.427819, lng: -70.651779, ruido: 13 },
+        { nombre: "Santa Ana", lat: -33.437305, lng: -70.650505, ruido: 23 },
+        { nombre: "Los Héroes", lat: -33.448383, lng: -70.662079, ruido: 32 },
+        { nombre: "Toesca", lat: -33.455021, lng: -70.664001, ruido: 30 },
+        { nombre: "Parque O'Higgins", lat: -33.464722, lng: -70.662003, ruido: 25 },
+        { nombre: "Rondizzoni", lat: -33.472492, lng: -70.659927, ruido: 21 },
+        { nombre: "Franklin", lat: -33.478458, lng: -70.655457, ruido: 34 },
+        { nombre: "El Llano", lat: -33.491741, lng: -70.646286, ruido: 37 },
+        { nombre: "San Miguel", lat: -33.500721, lng: -70.641418, ruido: 42 },
+        { nombre: "Lo Vial", lat: -33.507713, lng: -70.637161, ruido: 45 },
+        { nombre: "Departamental", lat: -33.517372, lng: -70.630745, ruido: 48 }
+      ];
 
-      new mapboxgl.Marker({ color })
-        .setLngLat([est.lon, est.lat])
-        .setPopup(new mapboxgl.Popup().setText(`${est.nombre}: ${est.porcentaje}%`))
-        .addTo(map);
-    });
-  </script>
-</body>
+      const map = L.map("map").setView([-33.45, -70.65], 12);
+
+      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        maxZoom: 18,
+        attribution: '© OpenStreetMap contributors'
+      }).addTo(map);
+
+      estaciones.forEach(estacion => {
+        let color;
+        if (estacion.ruido <= 10) color = "#88c9bf"; // Baja
+        else if (estacion.ruido <= 40) color = "#f7cb73"; // Media
+        else color = "#e76f51"; // Alta
+
+        L.circleMarker([estacion.lat, estacion.lng], {
+          radius: 8,
+          fillColor: color,
+          color: "#444",
+          weight: 1,
+          opacity: 1,
+          fillOpacity: 0.85
+        })
+          .bindPopup(`<strong>${estacion.nombre}</strong><br/>Ruido: ${estacion.ruido}%`)
+          .addTo(map);
+      });
+    </script>
+  </body>
 </html>
