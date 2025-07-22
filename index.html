@@ -2,72 +2,75 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Mapa de Ruido - Santiago</title>
-  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mapa de Ruido Santiago</title>
+
+  <!-- Estilo tipo Magnolia -->
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display&family=Open+Sans&display=swap" rel="stylesheet">
   <style>
     body {
-      font-family: 'Georgia', serif;
-      background: #fdfaf6;
       margin: 0;
-      padding: 0;
-      color: #333;
+      font-family: 'Open Sans', sans-serif;
+      display: flex;
+      height: 100vh;
+      background: #f9f9f9;
     }
-    header {
-      text-align: center;
+
+    #sidebar {
+      width: 30%;
       padding: 2rem;
+      background: #fff;
+      box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+      overflow-y: auto;
     }
-    h1 {
-      font-size: 2.5rem;
-      color: #7f5a83;
+
+    #sidebar h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem;
+      margin-bottom: 1rem;
     }
-    .content {
-      max-width: 900px;
-      margin: auto;
-      padding: 1rem;
-      line-height: 1.6;
-    }
+
     #map {
-      height: 600px;
-      width: 100%;
-      margin: 2rem 0;
-      border: 2px solid #ccc;
-      border-radius: 12px;
+      flex: 1;
+      height: 100vh;
     }
+
     .legend {
+      position: absolute;
+      bottom: 30px;
+      left: 40px;
       background: white;
       padding: 10px;
-      border-radius: 8px;
       font-size: 14px;
-      line-height: 1.4;
+      line-height: 1.5;
+      border-radius: 4px;
+      box-shadow: 0 0 6px rgba(0,0,0,0.3);
+    }
+
+    .legend div {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .color-box {
+      width: 15px;
+      height: 15px;
+      border-radius: 3px;
+      display: inline-block;
     }
   </style>
+
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
 </head>
 <body>
 
-  <header>
-    <h1>Mapa de Contaminación Acústica en Santiago</h1>
-  </header>
+  <div id="sidebar">
+    <h1>Contaminación Acústica</h1>
+    <p>Este mapa muestra los niveles de ruido registrados en distintas estaciones de la Línea 2 del metro de Santiago. Los colores indican el nivel:</p>
+    <ul>
+      <li><span class="color-box" style="background-color: green;"></span> Bajo</li>
+      <li><span class="color-box" style="background-color: yellow;"></span> M
 
-  <div class="content">
-    <p>
-      Este proyecto busca identificar las estaciones más ruidosas de la Línea 2 del Metro de Santiago.
-      A partir de datos recolectados, se visualiza la intensidad de ruido registrada en cada punto. 
-      El color de los círculos indica el nivel de contaminación acústica:
-    </p>
-
-    <div id="map"></div>
-
-    <p><strong>Verde:</strong> Ruido bajo — <strong>Amarillo:</strong> Ruido medio — <strong>Rojo:</strong> Ruido alto</p>
-  </div>
-
-  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-  <script>
-    const estaciones = [
-      { nombre: "Ciudad del Niño", lat: -33.50954, lon: -70.65665, porcentaje: 2.2 },
-      { nombre: "Departamental", lat: -33.50244, lon: -70.65463, porcentaje: 5.4 },
-      { nombre: "Lo Vial", lat: -33.49683, lon: -70.65302, porcentaje: 2.2 },
-      { nombre: "San Miguel", lat: -33.48872, lon: -70.65107, porcentaje: 2.2 },
-      { nombre: "El Llano", lat: -33.4826, lon: -70.64938, porcentaje: 1.1 },
-      { nombre: "Franklin", lat: -33.47666, lon: -70.64948, porcentaje: 45.2 },
-      { nombre: "Rondizzoni", lat: -33.46966, lon: -70.656
+        
