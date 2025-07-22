@@ -1,17 +1,85 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="utf-8">
-  <title>Mapa del Ruido - Línea 2</title>
+  <title>Puntos Ruidosos de Santiago</title>
+  <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"/>
   <style>
     #map { height: 100vh; }
+    .legend {
+      background: white;
+      padding: 10px;
+      line-height: 1.5em;
+      font-family: sans-serif;
+    }
+    .legend div {
+      display: flex;
+      align-items: center;
+    }
+    .legend-color {
+      width: 15px;
+      height: 15px;
+      margin-right: 5px;
+    }
   </style>
 </head>
 <body>
   <div id="map"></div>
-  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-  <script src="script.js"></script>
+  <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
+  <script>
+    var map = L.map('map').setView([-33.45, -70.65], 12);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 18,
+      attribution: '© OpenStreetMap'
+    }).addTo(map);
+
+    var estaciones = [
+      { nombre: "Ciudad del Niño", lat: -33.50954, lon: -70.65665, porcentaje: 2.2 },
+      { nombre: "Departamental", lat: -33.50244, lon: -70.65463, porcentaje: 5.4 },
+      { nombre: "Lo Vial", lat: -33.49683, lon: -70.65302, porcentaje: 2.2 },
+      { nombre: "San Miguel", lat: -33.48872, lon: -70.65107, porcentaje: 2.2 },
+      { nombre: "El Llano", lat: -33.4826, lon: -70.64938, porcentaje: 1.1 },
+      { nombre: "Franklin", lat: -33.47666, lon: -70.64948, porcentaje: 45.2 },
+      { nombre: "Rondizzoni", lat: -33.46966, lon: -70.65637, porcentaje: 4.3 },
+      { nombre: "Parque O'Higgins", lat: -33.4605, lon: -70.6557, porcentaje: 21.5 },
+      { nombre: "Toesca", lat: -33.45298, lon: -70.65859, porcentaje: 8.6 },
+      { nombre: "Los Heroes", lat: -33.44616, lon: -70.66048, porcentaje: 71.0 },
+      { nombre: "Santa Ana", lat: -33.43825, lon: -70.6599, porcentaje: 36.6 },
+      { nombre: "Puente Cal y Canto", lat: -33.43284, lon: -70.65308, porcentaje: 31.2 },
+      { nombre: "Patronato", lat: -33.42973, lon: -70.64712, porcentaje: 17.2 },
+      { nombre: "Cerro Blanco", lat: -33.42275, lon: -70.64506, porcentaje: 0.0 },
+      { nombre: "Cementerios", lat: -33.41398, lon: -70.6436, porcentaje: 0.0 },
+      { nombre: "Einstein", lat: -33.40595, lon: -70.64317, porcentaje: 1.1 },
+      { nombre: "Dorsal", lat: -33.39696, lon: -70.64274, porcentaje: 1.1 },
+      { nombre: "Zapadores", lat: -33.39094, lon: -70.64244, porcentaje: 4.3 },
+      { nombre: "Vespucio Norte", lat: -33.38075, lon: -70.64634, porcentaje: 8.6 }
+    ];
+
+    function getColor(porcentaje) {
+      if (porcentaje > 20) return "red";
+      if (porcentaje > 5) return "orange";
+      return "green";
+    }
+
+    estaciones.forEach(function(estacion) {
+      L.circle([estacion.lat, estacion.lon], {
+        color: getColor(estacion.porcentaje),
+        fillColor: getColor(estacion.porcentaje),
+        fillOpacity: 0.6,
+        radius: 200 + estacion.porcentaje * 10
+      }).addTo(map).bindPopup(estacion.nombre + ": " + estacion.porcentaje + "%");
+    });
+
+    var legend = L.control({ position: "bottomright" });
+    legend.onAdd = function () {
+      var div = L.DomUtil.create("div", "legend");
+      div.innerHTML += '<div><div class="legend-color" style="background: green;"></div>Contaminación acústica baja</div>';
+      div.innerHTML += '<div><div class="legend-color" style="background: orange;"></div>Contaminación acústica media</div>';
+      div.innerHTML += '<div><div class="legend-color" style="background: red;"></div>Contaminación acústica alta</div>';
+      return div;
+    };
+    legend.addTo(map);
+  </script>
 </body>
 </html>
